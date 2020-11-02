@@ -1,4 +1,4 @@
-# test-vue
+# prime-calculator-vue-ts
 
 ## Project setup
 ```
