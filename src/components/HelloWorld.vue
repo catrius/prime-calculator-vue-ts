@@ -1,61 +1,69 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-vuex" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript" target="_blank" rel="noopener">typescript</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div class='homepage'>
+    <h4>Previous prime number calculator</h4>
+    <label for='input' v-if='false'/>
+    <input
+      id='input'
+      :value='input'
+      class='input'
+      @keypress='handleInputKeyPress'
+      @change='handleInputChange'
+    />
+    <button class='calculate-button' @click='handleButtonClick'>
+      Calculate
+    </button>
+    <h5>{{ output || 'Not found' }}</h5>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Vue } from 'vue-property-decorator';
+import { calculatePreviousPrimeNumber } from '@/utils/math';
+import { ChangeEvent } from 'react';
 
-@Component
-export default class HelloWorld extends Vue {
-  @Prop() private msg!: string;
-}
+export default Vue.extend({
+  name: 'HelloWorld',
+  data() {
+    const result: {
+      input: number | null,
+      output: number | null,
+    } = {
+      input: 0,
+      output: 0,
+    };
+    return result;
+  },
+  methods: {
+    calculate() {
+      this.output = calculatePreviousPrimeNumber(this.input);
+    },
+    handleInputKeyPress(e: KeyboardEvent) {
+      if (e.key === 'Enter') {
+        this.calculate();
+      }
+    },
+    handleInputChange(e: ChangeEvent<HTMLInputElement>) {
+      this.input = parseInt(e.currentTarget.value, 10);
+    },
+    handleButtonClick() {
+      this.calculate();
+    },
+  },
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+<style scoped lang="sass">
+.homepage
+  position: fixed
+  top: 40%
+  left: 50%
+  transform: translate(-50%, -50%)
+
+  .input
+    display: block
+    width: 400px
+    margin: 0 auto 25px auto
+    text-align: center
+
 </style>
